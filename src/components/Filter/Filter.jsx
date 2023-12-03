@@ -5,12 +5,11 @@ export const Filter = ({ filter, changeFilter }) => {
         <label className={css.filterInput}>
             Find contacts by name: <br />
             <input className={css.filterField}
-                type="text"
-                name="filter"
-                value={filter}
-                onChange={changeFilter}
+                   type="text"
+                   name="filter"
+                   value={filter}
+                   onChange={changeFilter}
             />
-
         </label>
     )
     

@@ -16,6 +16,7 @@ export class Form extends Component {
         this.props.onCreateContact(this.state)
         this.reset();
     }
+
     reset = () =>
         this.setState({
             name: '',
@@ -23,14 +24,15 @@ export class Form extends Component {
         })
     
     render() {
+        const { name, number } = this.state;
         
         return (
             <form className={css.form} onSubmit={this.handleSubmit}>
                 <label>Name <br />
-                    <input type="text" name="name" value={this.state.name} required onChange={this.handleChange}/>
+                    <input type="text" name="name" value={name} required onChange={this.handleChange}/>
                 </label>
                 <label>Phone number <br />
-                    <input type="tel" name="number" value={this.state.number} required onChange={this.handleChange}/>
+                    <input type="tel" name="number" value={number} required onChange={this.handleChange}/>
                 </label>
                 <button className={css.button } type="submit">Add contact</button>
             </form>

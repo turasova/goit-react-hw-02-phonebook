@@ -4,6 +4,7 @@ import { ContactList } from "./ContactList/ContactList";
 import { nanoid } from "nanoid";
 import { Filter } from "./Filter/Filter";
 import css from './App.module.css';
+import Notiflix from "notiflix";
 
 export class App extends Component {
   state = {
@@ -17,13 +18,24 @@ export class App extends Component {
   }
 
   onCreateContact = (contacts) => {
-    const newContact = {
+    const isDuplicated = this.state.contacts.find((contact) => 
+      contact.name === contacts.name)
+    
+      const newContact = {
       ...contacts,
       id: nanoid(),
     }
-    const isDuplicated = this.state.contacts.find((contact) => 
-      contact.name === contacts.name)
-    if (isDuplicated) return
+    
+    if (isDuplicated) {
+      return Notiflix.Notify.failure(`${newContact.name} is already in contacts`,
+      {
+          width: '400px',
+          position: 'center-center',
+          timeout: 3000,
+          fontSize: '20px',
+        })
+    } 
+   
     this.setState((prev) => ({
       contacts: [...prev.contacts, newContact ]
     }))
@@ -39,6 +51,7 @@ export class App extends Component {
     const { value } = e.currentTarget;
     this.setState({filter: value})
   }
+
   filterByName = () => {
     const { contacts, filter } = this.state;
     const lowerFilter = filter.toLowerCase();
@@ -47,20 +60,23 @@ export class App extends Component {
   }
   
   render() {
+    const { filter } = this.state;
     const visibleContacts = this.filterByName();
     return (
       <div>
         <h1 className={css.title}>Phonebook</h1>
-        <Form onCreateContact = {this.onCreateContact} />
+        <Form
+          onCreateContact={this.onCreateContact}
+        />
         <h2 className={css.title}>Contacts</h2>
-        <Filter filter={this.filter}
-                changeFilter={this.changeFilter}
+        <Filter
+          filter={filter}
+          changeFilter={this.changeFilter}
         />
         <ContactList
           contacts={visibleContacts}
           deleteContact={this.deleteContact}
-        />
-    
+        />   
       </div>
     );
   }
